@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}
+Moje kursy
+{% endblock %}
+
+{% block content %}
+    <h1>Moje kursy</h1>
+    <div class="module">
+        {% for course in object_list %}
+            <div class="course-info">
+                <h3>{{ course.title }}</h3>
+                <p>
+                    <a href="{% url 'course:course_edit' course.id %}">Edytuj</a>
+                    <a href="{% url 'course:course_delete' course.id %}">Usuń</a>
+                    <a href="{% url 'course:course_module_update' course.id %}">Edytuj moduły</a>
+                        {% if course.modules.count > 0 %}
+                            <a href="{% url 'course:module_content_list' course.modules.first.id %}">Zarządzaj treścią</a>
+                        {% endif %}
+                </p>
+            </div>
+        {% empty %}
+            <p>Jeszcze nie utworzyłęś żadnych kursów</p>
+        {% endfor %}
+        <p>
+            <a href="{% url 'course:course_create' %}" class="button">Utwórz nowy kurs</a>
+        </p>
+    </div>
+{% endblock %}
